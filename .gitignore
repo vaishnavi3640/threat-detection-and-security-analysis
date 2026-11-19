@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+ENV/
+.env
+!backend/.env.example
+!threatguard/.env.example
+
+# Database (keep schema, ignore data files)
+*.db
+*.sqlite
+*.sqlite3
+
+# Outputs/Reports
+threatguard/outputs/
+outputs/
+
+# Logs
+*.log
+logs/
+
+# Node / React
+node_modules/
+frontend-react/node_modules/
+frontend-react/dist/
+frontend-react/.env
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
