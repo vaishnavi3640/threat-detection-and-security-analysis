@@ -41,11 +41,12 @@ React + Vite, Flask, and SQLAlchemy with SQLite by default.
 
 ## Methodology / Workflow
 
-ThreatGuard follows a safe assessment workflow: validate an authorized target,
-collect observable website signals, run passive security and privacy checks,
-score findings, provide remediation guidance, then save and compare assessments.
+The illustration below presents a conceptual end-to-end workflow. Some shown
+capabilities, including XSS/SQLi detection and automatically applying fixes,
+are not implemented in the current ThreatGuard scanner. The implemented flow
+uses authorized, passive checks and provides guidance for owners to apply fixes.
 
-![ThreatGuard methodology and workflow](docs/threatguard-methodology.svg)
+![Conceptual ThreatGuard methodology and workflow](docs/threatguard-methodology.png)
 
 ## How to Run
 
