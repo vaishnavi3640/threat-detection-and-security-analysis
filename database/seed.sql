@@ -1,3 +1,5 @@
+USE webshield;
+
 INSERT INTO users (full_name, email, password_hash)
 VALUES ('Demo User', 'demo@webshield.com', 'bcrypt-hash-placeholder');
 
@@ -21,7 +23,7 @@ INSERT INTO finding_templates (title, category, owasp_code, severity, descriptio
 
 INSERT INTO findings (scan_id, template_id) VALUES (1,1),(1,2),(1,3),(1,4),(1,5);
 
-INSERT INTO incidents (workspace_id, type, severity, status) VALUES
+INSERT INTO incidents (workspace_id, `type`, severity, status) VALUES
 (1, 'Unauthorized Access', 'Critical', 'open'),
 (1, 'Segmentation Disabled', 'Medium', 'open');
 
@@ -31,5 +33,5 @@ INSERT INTO trackers (workspace_id, name, block_until_consent) VALUES
 INSERT INTO tickets (workspace_id, title, priority, status, assignee) VALUES
 (1, 'Fix session cookie flags', 'High', 'open', 'Demo User');
 
-INSERT INTO risks (workspace_id, title, likelihood, impact, owner, status) VALUES
+INSERT INTO risks (workspace_id, title, likelihood, impact, `owner`, status) VALUES
 (1, 'Unauthorized Access', 'High', 'High', 'Demo User', 'open');
