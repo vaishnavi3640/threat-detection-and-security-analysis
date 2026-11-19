@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1060" role="img" aria-labelledby="title desc">
+  <title id="title">ThreatGuard methodology and workflow</title>
+  <desc id="desc">Seven steps: submit an authorized website URL, validate its scope, collect observable signals with passive requests, analyze security and privacy, classify findings and calculate scores, generate guidance and PDF reports, then review history and compare reassessments.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#173b75"/></marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#17866c"/></marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#172b4b}
+      .banner{fill:#152f62}.banner-title{fill:#fff;font-size:38px;font-weight:700}.banner-sub{fill:#deebff;font-size:19px}
+      .headline{font-size:28px;font-weight:700}.subhead{font-size:18px;font-style:italic;fill:#394f70}
+      .stephead{font-size:19px;font-weight:700}.body{font-size:15px;fill:#243957}.small{font-size:14px;fill:#425775}
+      .card{fill:#fff;stroke:#31538a;stroke-width:2.2}.blue{fill:#e7f1ff;stroke:#80a9e5;stroke-width:1.5}
+      .green{fill:#e4f5ed;stroke:#78bb9b;stroke-width:1.5}.violet{fill:#f0eaff;stroke:#a790db;stroke-width:1.5}
+      .orange{fill:#fff0e2;stroke:#dfa365;stroke-width:1.5}.num{font-size:22px;font-weight:700;fill:#fff}
+      .flow{fill:none;stroke:#173b75;stroke-width:4;marker-end:url(#arrow)}.feedback{fill:none;stroke:#17866c;stroke-width:3.5;marker-end:url(#arrow-green)}
+      .rule{stroke:#c8d8ef;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1800" height="1060" fill="#f5f8ff"/>
+  <path d="M0 240 C160 140 260 220 400 145 L400 0 H0Z M1800 240 C1640 140 1540 220 1400 145 L1400 0 H1800Z" fill="#e8f1ff"/>
+  <line x1="80" y1="87" x2="350" y2="87" stroke="#294d87" stroke-width="3"/>
+  <line x1="1450" y1="87" x2="1720" y2="87" stroke="#294d87" stroke-width="3"/>
+  <rect x="350" y="24" width="1100" height="126" rx="30" class="banner"/>
+  <path d="M397 51 L425 39 L453 51 L450 80 Q446 101 425 113 Q404 101 400 80Z" fill="none" stroke="#60d5a2" stroke-width="5"/>
+  <path d="M417 71 v-7 a8 8 0 0 1 16 0 v7 M414 71 h22 v18 h-22z" fill="none" stroke="#a7edce" stroke-width="3.5"/>
+  <text x="490" y="75" class="banner-title">Methodology / Workflow</text>
+  <text x="590" y="116" class="banner-sub">Threat Detection and Website Security Analysis</text>
+  <text x="900" y="199" text-anchor="middle" class="headline">Analyze  →  Detect  →  Assess  →  Improve</text>
+  <text x="900" y="229" text-anchor="middle" class="subhead">A safe, step-by-step workflow for authorized website assessments</text>
+
+  <!-- Workflow cards -->
+  <rect x="24" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="24" y="280" width="232" height="66" rx="18" fill="#dceaff"/>
+  <circle cx="140" cy="280" r="29" fill="#1557b0"/><text x="140" y="288" text-anchor="middle" class="num">1</text>
+  <text x="140" y="326" text-anchor="middle" class="stephead">Enter Target URL</text>
+  <rect x="43" y="366" width="194" height="54" rx="12" class="blue"/>
+  <text x="140" y="399" text-anchor="middle" class="body">Website URL</text>
+  <text x="48" y="459" class="body">• Owner submits a scan</text><text x="62" y="481" class="body">request in the web app.</text>
+  <text x="48" y="528" class="body">• Authorization confirms</text><text x="62" y="550" class="body">permission to assess it.</text>
+  <text x="48" y="597" class="small">React + Vite interface</text>
+  <text x="48" y="621" class="small">begins the assessment.</text>
+
+  <rect x="278" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="278" y="280" width="232" height="66" rx="18" fill="#dff4e9"/>
+  <circle cx="394" cy="280" r="29" fill="#16855f"/><text x="394" y="288" text-anchor="middle" class="num">2</text>
+  <text x="394" y="326" text-anchor="middle" class="stephead">Validate Target</text>
+  <rect x="297" y="366" width="194" height="82" rx="12" class="green"/>
+  <text x="394" y="399" text-anchor="middle" class="body">Flask API checks</text><text x="394" y="423" text-anchor="middle" class="body">the request and URL</text>
+  <text x="302" y="489" class="body">• Validate URL format</text>
+  <text x="302" y="529" class="body">• Block private targets</text><text x="316" y="551" class="body">by default</text>
+  <text x="302" y="597" class="small">Local demo exception only</text><text x="302" y="621" class="small">with an explicit dev opt-in</text>
+
+  <rect x="532" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="532" y="280" width="232" height="66" rx="18" fill="#e4eeff"/>
+  <circle cx="648" cy="280" r="29" fill="#315fb8"/><text x="648" y="288" text-anchor="middle" class="num">3</text>
+  <text x="648" y="326" text-anchor="middle" class="stephead">Collect Signals</text>
+  <rect x="551" y="366" width="194" height="82" rx="12" class="blue"/>
+  <text x="648" y="399" text-anchor="middle" class="body">Passive HTTP</text><text x="648" y="423" text-anchor="middle" class="body">page observation</text>
+  <text x="556" y="489" class="body">• Response headers</text>
+  <text x="556" y="529" class="body">• Page metadata and HTML</text>
+  <text x="556" y="569" class="body">• Cookies and links/scripts</text>
+  <text x="556" y="621" class="small">Read-only requests; no</text><text x="556" y="645" class="small">exploit or write operations</text>
+
+  <rect x="786" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="786" y="280" width="232" height="66" rx="18" fill="#eee7ff"/>
+  <circle cx="902" cy="280" r="29" fill="#6841b5"/><text x="902" y="288" text-anchor="middle" class="num">4</text>
+  <text x="902" y="326" text-anchor="middle" class="stephead">Analyze Findings</text>
+  <rect x="805" y="366" width="194" height="95" rx="12" class="violet"/>
+  <text x="902" y="397" text-anchor="middle" class="body">Security checks</text>
+  <text x="902" y="422" text-anchor="middle" class="small">HTTPS/TLS, headers,</text><text x="902" y="443" text-anchor="middle" class="small">cookies, server signals</text>
+  <rect x="805" y="478" width="194" height="95" rx="12" class="green"/>
+  <text x="902" y="509" text-anchor="middle" class="body">Privacy checks</text>
+  <text x="902" y="534" text-anchor="middle" class="small">Trackers, cookies,</text><text x="902" y="555" text-anchor="middle" class="small">privacy-policy signals</text>
+  <text x="810" y="618" class="small">Modules create structured</text><text x="810" y="642" class="small">findings for scoring.</text>
+
+  <rect x="1040" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="1040" y="280" width="232" height="66" rx="18" fill="#fff0dc"/>
+  <circle cx="1156" cy="280" r="29" fill="#d48219"/><text x="1156" y="288" text-anchor="middle" class="num">5</text>
+  <text x="1156" y="326" text-anchor="middle" class="stephead">Assess Risk</text>
+  <rect x="1059" y="366" width="194" height="88" rx="12" class="orange"/>
+  <text x="1156" y="400" text-anchor="middle" class="body">Risk classification</text><text x="1156" y="427" text-anchor="middle" class="small">Severity and priority</text>
+  <text x="1064" y="500" class="body">• Calculate security score</text>
+  <text x="1064" y="540" class="body">• Calculate privacy score</text>
+  <text x="1064" y="580" class="body">• Calculate trust score</text>
+  <text x="1064" y="635" class="small">Scores are based on</text><text x="1064" y="659" class="small">detected findings.</text>
+
+  <rect x="1294" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="1294" y="280" width="232" height="66" rx="18" fill="#e1f4ed"/>
+  <circle cx="1410" cy="280" r="29" fill="#16856f"/><text x="1410" y="288" text-anchor="middle" class="num">6</text>
+  <text x="1410" y="326" text-anchor="middle" class="stephead">Guide &amp; Report</text>
+  <rect x="1313" y="366" width="194" height="88" rx="12" class="green"/>
+  <text x="1410" y="400" text-anchor="middle" class="body">Recommendations</text><text x="1410" y="427" text-anchor="middle" class="small">Prioritized remediation</text>
+  <text x="1318" y="500" class="body">• Explain issues and fixes</text>
+  <text x="1318" y="540" class="body">• Generate PDF report</text>
+  <text x="1318" y="580" class="body">• Optional AI explanation</text>
+  <text x="1318" y="635" class="small">AI explanation is available</text><text x="1318" y="659" class="small">when configured.</text>
+
+  <rect x="1548" y="280" width="232" height="450" rx="18" class="card"/>
+  <rect x="1548" y="280" width="232" height="66" rx="18" fill="#e1f4e4"/>
+  <circle cx="1664" cy="280" r="29" fill="#278845"/><text x="1664" y="288" text-anchor="middle" class="num">7</text>
+  <text x="1664" y="326" text-anchor="middle" class="stephead">Review &amp; Reassess</text>
+  <rect x="1567" y="366" width="194" height="88" rx="12" class="green"/>
+  <text x="1664" y="400" text-anchor="middle" class="body">Review in workspace</text><text x="1664" y="427" text-anchor="middle" class="small">Dashboard and findings</text>
+  <text x="1572" y="500" class="body">• View saved scan history</text>
+  <text x="1572" y="540" class="body">• Compare completed scans</text>
+  <text x="1572" y="580" class="body">• See resolved, new, and</text><text x="1586" y="602" class="body">remaining issues</text>
+  <text x="1572" y="654" class="small">Results guide the next fix</text>
+
+  <!-- Directional arrows between steps -->
+  <path d="M256 498 H271" class="flow"/><path d="M510 498 H525" class="flow"/>
+  <path d="M764 498 H779" class="flow"/><path d="M1018 498 H1033" class="flow"/>
+  <path d="M1272 498 H1287" class="flow"/><path d="M1526 498 H1541" class="flow"/>
+
+  <!-- Persistence and reassessment feedback -->
+  <rect x="190" y="806" width="1420" height="172" rx="20" fill="#e6eeff" stroke="#294d87" stroke-width="2.4"/>
+  <rect x="600" y="783" width="600" height="54" rx="20" class="banner"/>
+  <text x="900" y="818" text-anchor="middle" class="column-title">Persistence &amp; Continuous Improvement</text>
+  <line x1="655" y1="850" x2="655" y2="950" class="rule"/>
+  <line x1="1125" y1="850" x2="1125" y2="950" class="rule"/>
+  <text x="240" y="882" class="stephead">Save assessment data</text>
+  <text x="240" y="913" class="body">SQLAlchemy stores users, websites, scans,</text>
+  <text x="240" y="938" class="body">findings, and reports in SQLite by default.</text>
+  <text x="700" y="882" class="stephead">Keep history</text>
+  <text x="700" y="913" class="body">Completed scan results remain available</text>
+  <text x="700" y="938" class="body">for dashboards, reports, and comparison.</text>
+  <text x="1170" y="882" class="stephead">Measure changes</text>
+  <text x="1170" y="913" class="body">A reassessment compares prior and latest</text>
+  <text x="1170" y="938" class="body">findings, scores, and issues that remain.</text>
+  <path d="M902 730 V774" class="flow"/>
+  <path d="M1664 730 V760 H12 V252 H140 V270" class="feedback"/>
+
+  <rect x="190" y="1000" width="1420" height="42" rx="12" fill="#d9f3e8" stroke="#72bea1" stroke-width="1.5"/>
+  <text x="900" y="1028" text-anchor="middle" class="small">Authorized targets only • Passive, non-destructive checks • Local demo requires an explicit development-only opt-in</text>
+</svg>

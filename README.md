@@ -39,6 +39,14 @@ React + Vite, Flask, and SQLAlchemy with SQLite by default.
 
 ![ThreatGuard system architecture](docs/threatguard-architecture.png)
 
+## Methodology / Workflow
+
+ThreatGuard follows a safe assessment workflow: validate an authorized target,
+collect observable website signals, run passive security and privacy checks,
+score findings, provide remediation guidance, then save and compare assessments.
+
+![ThreatGuard methodology and workflow](docs/threatguard-methodology.svg)
+
 ## How to Run
 
 **Backend:**
