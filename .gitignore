@@ -1,4 +1,4 @@
-# Python
+# ─── Python ─────────────────────────────────────────
 __pycache__/
 *.pyc
 *.pyo
@@ -13,38 +13,36 @@ venv/
 .venv/
 env/
 ENV/
+
+# ─── Environment Variables ──────────────────────────
 .env
 !backend/.env.example
 !threatguard/.env.example
 
-# Database (keep schema, ignore data files)
+# ─── Database files (keep schema SQL, ignore runtime) 
 *.db
 *.sqlite
 *.sqlite3
 
-# Outputs/Reports
+# ─── Outputs / Reports ─────────────────────────────
 threatguard/outputs/
 outputs/
 
-# Logs
+# ─── Logs ───────────────────────────────────────────
 *.log
 logs/
 
-# Node / React
+# ─── Node / React ──────────────────────────────────
 node_modules/
-frontend-react/node_modules/
 frontend-react/dist/
-frontend-react/.env
-.DS_Store
-Thumbs.db
 
-# IDE
+# ─── IDE ────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
+# ─── OS ─────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 desktop.ini
