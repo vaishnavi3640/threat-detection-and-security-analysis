@@ -29,6 +29,14 @@ A web app that scans websites for security vulnerabilities and privacy issues. B
 └── docker-compose.yml
 ```
 
+## Architecture
+
+The diagram below shows how an authorized scan moves through the frontend, API,
+target-safety checks, passive analyzers, scoring, database, and report/history
+views.
+
+![ThreatGuard system architecture](docs/threatguard-architecture.svg)
+
 ## How to Run
 
 **Backend:**
@@ -87,6 +95,80 @@ MySQL reference schema is in the `database/` folder.
 - **Scanning:** requests, BeautifulSoup, ssl module
 - **Reports:** ReportLab
 - **AI:** Groq API (optional - for explaining findings)
+
+## Local before-and-after demo (development only)
+
+This demo runs a deliberately simple site on `127.0.0.1:8765`. At first it
+omits the Content-Security-Policy (CSP) header. ThreatGuard's normal protections
+continue to block local/private targets. The backend permits only this exact
+loopback demo origin when both `APP_ENV=development` and
+`THREATGUARD_LOCAL_DEMO=1` are set. Do not enable this option in production.
+
+### 1. Start the demo website
+
+Open PowerShell at the repository root:
+
+```powershell
+$env:DEMO_ADD_CSP = "0"
+py .\demo-site\server.py
+```
+
+Leave this window running. Open `http://127.0.0.1:8765` in a browser to see the
+demo page. The server listens on loopback only; it is not exposed to your LAN.
+
+### 2. Start the backend with the demo-only opt-in
+
+Open a second PowerShell window at the repository root. This command assumes
+the virtual environment is in the parent project folder. If yours is elsewhere,
+use that Python executable instead.
+
+```powershell
+$env:APP_ENV = "development"
+$env:THREATGUARD_LOCAL_DEMO = "1"
+$env:PORT = "5055"
+..\.venv\Scripts\python.exe backend\run.py
+```
+
+Leave this window running. Open a third PowerShell window and start the frontend:
+
+```powershell
+npm run dev --prefix frontend-react
+```
+
+### 3. Run the first scan
+
+Open `http://localhost:3000`, sign in, and open **Scan Website**. Enter
+`http://127.0.0.1:8765`, tick the authorization checkbox, and start the scan.
+The report should include **Missing Content-Security-Policy Header**.
+
+### 4. Apply the fix, then scan again
+
+Stop only the demo server with **Ctrl+C** in its window. Restart it with CSP
+enabled:
+
+```powershell
+$env:DEMO_ADD_CSP = "1"
+py .\demo-site\server.py
+```
+
+In ThreatGuard, scan `http://127.0.0.1:8765` again, confirming authorization.
+The second report should show the CSP header present and updated scores. Open
+**Reassessment** to compare the two completed scans.
+
+### Screenshots for your presentation
+
+After running the demo, capture (1) the first report with the missing CSP
+finding, (2) the second report after the fix, and (3) the reassessment view.
+Save the images under `docs/screenshots/` and add them to the README before
+presenting. Use screenshots of your actual runs, not example or fabricated
+results.
+
+### Safety limits
+
+- The local exception requires development mode and the explicit opt-in.
+- Only `http://127.0.0.1:8765` is allowed; other local/private targets remain
+  blocked, including redirect destinations.
+- The demo server binds to `127.0.0.1` and the scanner makes read-only GETs.
 
 ## Environment Variables
 
