@@ -1,54 +1,29 @@
-# Contributing to ThreatGuard
+# Contributing
 
-Thank you for contributing to this project! Here's how to get started.
+## Setup
 
-## Getting Started
+1. Clone the repo
+2. Install backend deps: `pip install -r backend/requirements.txt`
+3. Install frontend deps: `cd frontend-react && npm install`
+4. Run backend: `python backend/run.py`
+5. Run frontend: `cd frontend-react && npm run dev`
 
-1. **Fork** the repository
-2. **Clone** your fork locally
-3. Create a **feature branch**: `git checkout -b feature/your-feature-name`
-4. Make your changes
-5. **Commit** with meaningful messages: `git commit -m "feat(scope): description"`
-6. **Push** your branch: `git push origin feature/your-feature-name`
-7. Open a **Pull Request** to the `master` branch
+## Branches
 
-## Commit Message Convention
+- `master` is the main branch
+- Create your own branch for features: `git checkout -b your-name/feature`
+- Push and open a pull request when done
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
+## Commit Messages
 
-| Prefix | Description |
-|--------|-------------|
-| `feat(scope):` | New feature |
-| `fix(scope):` | Bug fix |
-| `refactor(scope):` | Code refactoring |
-| `docs:` | Documentation only |
-| `style:` | Formatting, no code change |
-| `test:` | Adding tests |
-| `chore:` | Build, CI, deps |
+Try to keep commit messages clear, like:
+- `add scan results page`
+- `fix dashboard score calculation`
+- `update database schema`
 
-**Scopes**: `frontend`, `backend`, `database`, `modules`, `docs`
+## Folder Guide
 
-## Project Structure
-
-- `backend/` — Flask REST API
-- `frontend-react/` — React + Vite SPA
-- `threatguard/` — Python scanning engine modules
-- `database/` — MySQL reference schema
-
-## Running Locally
-
-```bash
-# Backend
-pip install -r backend/requirements.txt
-python backend/run.py
-
-# Frontend
-cd frontend-react && npm install && npm run dev
-```
-
-## Code Guidelines
-
-- Python: PEP 8, type hints where possible
-- React: Functional components, hooks only
-- CSS: CSS custom properties (no Tailwind)
-- Database: SQLAlchemy ORM for runtime, raw SQL for reference schema
+- `backend/` - Flask API, edit this if you're working on API endpoints
+- `frontend-react/src/pages/` - React pages, each page is its own file
+- `threatguard/modules/` - scanning logic, privacy checks, scoring
+- `database/` - SQL schema files

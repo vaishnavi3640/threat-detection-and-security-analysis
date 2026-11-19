@@ -1,13 +1,11 @@
-"""
-ThreatGuard – Flask REST API Backend
-Wraps all scanning modules and exposes JSON endpoints for the React frontend.
-"""
+# Flask backend for ThreatGuard
+# handles all API requests from the React frontend
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sys
 import os
 
-# Allow imports from threatguard package
+# allow imports from threatguard folder
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'threatguard'))
 
 from database.db import init_db, get_session
@@ -26,7 +24,7 @@ import time
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000", "http://localhost:5173"])
 
-# Initialize DB on startup
+# create tables if they dont exist
 init_db()
 
 

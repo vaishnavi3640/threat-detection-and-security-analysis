@@ -1,187 +1,104 @@
-# 🛡️ ThreatGuard — Threat Detection & Security Analysis System
+# ThreatGuard - Threat Detection & Security Analysis System
 
-> A collaborative, full-stack web security scanner with **React frontend**, **Flask REST API backend**, **SQLAlchemy ORM**, and **MySQL reference schema**.
+A web app that scans websites for security vulnerabilities and privacy issues. Built with React frontend, Flask backend, and SQLite database.
 
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-├── backend/                ← Flask REST API server
-│   ├── app.py              ← All API routes (scan, findings, dashboard, reports, etc.)
-│   ├── run.py              ← Startup script
-│   ├── requirements.txt    ← Python dependencies
-│   ├── Dockerfile          ← Docker build for backend
-│   └── .env.example        ← Environment variable template
+├── backend/              # Flask API server
+│   ├── app.py            # API routes
+│   ├── run.py            # start the server
+│   └── requirements.txt  # python dependencies
 │
-├── frontend-react/         ← React + Vite frontend (SPA)
-│   ├── src/
-│   │   ├── pages/          ← Dashboard, ScanPage, ScanResult, Security, Privacy,
-│   │   │                     Weaknesses, Reports, History, Reassessment
-│   │   ├── components/     ← Shared CSS & reusable components
-│   │   ├── App.jsx         ← Router + Sidebar layout
-│   │   ├── api.js          ← Axios API client
-│   │   └── main.jsx        ← React entry point
-│   ├── package.json
-│   ├── vite.config.js      ← Dev proxy to Flask backend
-│   ├── Dockerfile          ← Production Docker (nginx)
-│   └── nginx.conf          ← Reverse proxy config
+├── frontend-react/       # React app (Vite)
+│   ├── src/pages/        # all the pages (dashboard, scan, results, etc)
+│   ├── src/App.jsx       # main layout with sidebar
+│   ├── src/api.js        # API calls to backend
+│   └── package.json
 │
-├── threatguard/            ← Python scanning engine (shared modules)
-│   ├── database/           ← SQLAlchemy ORM models & session factory
-│   │   ├── models.py       ← User, Website, Scan, Finding, Report tables
-│   │   └── db.py           ← Engine, session, init_db()
-│   ├── modules/            ← Core analysis modules
-│   │   ├── security_scanner.py   ← HTTPS, TLS, headers, cookies
-│   │   ├── privacy_analyzer.py   ← Trackers, 3rd-party, privacy policy
-│   │   ├── scoring_engine.py     ← Security/Privacy/Trust scores
-│   │   ├── risk_classifier.py    ← Severity classification rules
-│   │   ├── ai_explainer.py       ← Groq LLM explanations
-│   │   ├── report_generator.py   ← PDF report generation
-│   │   └── reassessment.py       ← Scan comparison
-│   ├── utils/              ← Validators, helpers
-│   ├── data/               ← Tracker domain lists
-│   ├── tests/              ← Test suite
-│   └── app.py              ← (Original Streamlit app — still works)
+├── threatguard/           # python scanning modules
+│   ├── database/          # SQLAlchemy models
+│   ├── modules/           # scanner, privacy analyzer, scoring, etc
+│   └── utils/             # helpers and validators
 │
-├── database/               ← MySQL reference schema (team contribution)
-│   ├── schema.sql          ← Full MySQL schema (12 tables)
-│   ├── seed.sql            ← Demo data
-│   └── queries.sql         ← Common queries
+├── database/              # MySQL schema (reference)
+│   ├── schema.sql
+│   ├── seed.sql
+│   └── queries.sql
 │
-├── docker-compose.yml      ← One-command deployment
-└── README.md
+└── docker-compose.yml
 ```
 
----
+## How to Run
 
-## 🚀 Quick Start
-
-### Prerequisites
-- **Python 3.10+** with pip
-- **Node.js 18+** with npm
-
-### 1. Install Backend Dependencies
-
-```bash
-cd backend
-pip install -r requirements.txt
+**Backend:**
 ```
-
-### 2. Configure Environment (Optional)
-
-```bash
-cp backend/.env.example backend/.env
-# Edit .env to add your GROQ_API_KEY for AI explanations
-```
-
-### 3. Start the Backend API
-
-```bash
+pip install -r backend/requirements.txt
 python backend/run.py
-# → 🛡️ ThreatGuard API running on http://localhost:5000
 ```
+Server starts at http://localhost:5000
 
-### 4. Start the React Frontend
-
-```bash
+**Frontend:**
+```
 cd frontend-react
 npm install
 npm run dev
-# → React app at http://localhost:3000
+```
+Opens at http://localhost:3000
+
+Both need to be running at the same time. The frontend automatically sends API requests to the backend through the Vite proxy.
+
+## What it Does
+
+- Scans any public website URL
+- Checks HTTPS, TLS certificates, security headers (CSP, HSTS, etc)
+- Checks cookie security flags (Secure, HttpOnly, SameSite)
+- Detects third-party trackers and analytics scripts
+- Checks if the site has a privacy policy
+- Gives a Trust Score out of 100
+- Can generate PDF reports
+- Compare old and new scans to track improvements
+
+## API Endpoints
+
+| Method | URL | What it does |
+|--------|-----|-------------|
+| POST | /api/scan | scan a website |
+| GET | /api/scans | list all scans |
+| GET | /api/scans/:id | get scan details |
+| GET | /api/dashboard | dashboard stats |
+| GET | /api/scans/:id/findings | get findings |
+| POST | /api/scans/:id/report | generate PDF |
+| POST | /api/reassess | compare two scans |
+| GET | /api/history | scan history |
+
+## Database
+
+Uses SQLite with SQLAlchemy ORM. Tables: users, websites, scans, findings, reports.
+Database file gets created automatically when you first run the backend.
+
+MySQL reference schema is in the `database/` folder.
+
+## Tech Stack
+
+- **Frontend:** React, Vite, React Router, Recharts, Axios
+- **Backend:** Flask, Flask-CORS
+- **Database:** SQLite + SQLAlchemy
+- **Scanning:** requests, BeautifulSoup, ssl module
+- **Reports:** ReportLab
+- **AI:** Groq API (optional - for explaining findings)
+
+## Environment Variables
+
+Create a `.env` file in backend/ (optional):
+```
+GROQ_API_KEY=your_key_here
 ```
 
-### 5. Open in Browser
+## Team
 
-Navigate to **http://localhost:3000** — the React app proxies API calls to Flask automatically.
-
----
-
-## 🔌 REST API Endpoints
-
-| Method | Endpoint                     | Description                              |
-|--------|------------------------------|------------------------------------------|
-| GET    | `/api/health`                | Health check                             |
-| GET    | `/api/dashboard`             | Dashboard stats & averages               |
-| POST   | `/api/scan`                  | Run a new scan `{ "url": "..." }`        |
-| GET    | `/api/scans`                 | List all completed scans                 |
-| GET    | `/api/scans/:id`             | Full scan details with findings          |
-| GET    | `/api/scans/:id/findings`    | Findings (optionally `?category=security`) |
-| POST   | `/api/scans/:id/explain`     | AI-explain findings (needs GROQ_API_KEY) |
-| POST   | `/api/scans/:id/report`      | Generate PDF report                      |
-| GET    | `/api/history`               | Scan history grouped by domain           |
-| POST   | `/api/reassess`              | Compare scans `{ url }` or `{ scan_id_1, scan_id_2 }` |
-
----
-
-## 🗃️ Database
-
-### Runtime Database (SQLite + SQLAlchemy ORM)
-- Auto-created at `threatguard/threatguard.db` on first run
-- Tables: `users`, `websites`, `scans`, `findings`, `reports`
-- Defined in [`threatguard/database/models.py`](threatguard/database/models.py)
-
-### Reference Schema (MySQL)
-- Full MySQL 8 schema in [`database/schema.sql`](database/schema.sql)
-- 12 tables: users, workspaces, assets, scans, findings, incidents, trackers, tickets, risks, notifications, user_settings
-- Demo seed data in [`database/seed.sql`](database/seed.sql)
-
----
-
-## 🧠 Features
-
-| Feature | Description |
-|---------|-------------|
-| ✅ HTTPS & TLS | Certificate validity, expiry, redirect checks |
-| ✅ Security Headers | CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy |
-| ✅ Cookie Analysis | Secure, HttpOnly, SameSite flags |
-| ✅ Tracker Detection | Google Analytics, Meta Pixel, ad networks, fingerprinting |
-| ✅ Privacy Policy | Automated privacy page & keyword detection |
-| ✅ Trust Score | 0–100 composite score (security × 0.5 + privacy × 0.5) |
-| ✅ AI Explanations | Groq LLM-powered finding explanations |
-| ✅ PDF Reports | Downloadable security assessment reports |
-| ✅ Reassessment | Compare old vs new scans to track improvements |
-| ✅ React Dashboard | Modern dark-themed UI with charts and animations |
-
----
-
-## 🐳 Docker Deployment
-
-```bash
-docker-compose up --build
-# Frontend → http://localhost:3000
-# Backend  → http://localhost:5000
-```
-
----
-
-## 👥 Team & Contributors
-
-| Contributor | Focus Area |
-|-------------|------------|
-| Vaishnavi   | Frontend (React) + Backend API Integration |
-| Aishwarya | Database Schema (MySQL) |
-| Aditi | Backend Modules & Scanning Engine |
-
----
-
-## 📋 Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, Vite, React Router, Recharts, Framer Motion, Lucide Icons |
-| Backend  | Flask, Flask-CORS, SQLAlchemy |
-| Database | SQLite (runtime), MySQL (reference schema) |
-| AI       | Groq API (LLaMA) |
-| Reports  | ReportLab (PDF generation) |
-| Scanning | Requests, BeautifulSoup, ssl, cryptography |
-
----
-
-## 🔐 Environment Variables
-
-```env
-GROQ_API_KEY=your_key_here        # Optional — enables AI explanations
-DATABASE_URL=sqlite:///threatguard.db
-FLASK_DEBUG=1
-```
+| Name | Work |
+|------|------|
+| Vaishnavi | Frontend (React) + Backend API |
+| Aishwarya | Database Schema |
+| Aditi | Backend Modules |

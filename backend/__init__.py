@@ -1,3 +1,1 @@
-"""
-ThreatGuard Backend - Flask REST API
-"""
+# backend package
