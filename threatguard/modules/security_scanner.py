@@ -20,6 +20,7 @@ import datetime
 import requests
 from urllib.parse import urlparse
 from modules.risk_classifier import classify_finding, SECURITY_RULES
+from utils.validators import safe_get
 
 # Request timeout (seconds)
 _TIMEOUT = 15
@@ -52,11 +53,10 @@ def run_security_scan(url: str) -> list[dict]:
 
     # ── Fetch the page ────────────────────────────────────────────────────────
     try:
-        response = requests.get(
+        response = safe_get(
             url,
             timeout=_TIMEOUT,
             headers=_HEADERS,
-            allow_redirects=True,
             verify=True,
         )
         headers = response.headers
@@ -68,17 +68,8 @@ def run_security_scan(url: str) -> list[dict]:
             "TLS/SSL Certificate Error",
             f"SSL handshake failed: {str(exc)[:200]}",
         ))
-        # Try again without verification to get headers
-        try:
-            response = requests.get(
-                url, timeout=_TIMEOUT, headers=_HEADERS,
-                allow_redirects=True, verify=False,
-            )
-            headers = response.headers
-            cookies = response.cookies
-            final_url = response.url
-        except Exception:
-            return findings
+        # Do not retry with certificate verification disabled.
+        return findings
     except requests.exceptions.ConnectionError as exc:
         findings.append({
             "finding_name": "Connection Failed",
@@ -114,9 +105,9 @@ def run_security_scan(url: str) -> list[dict]:
     if is_https:
         http_url = url.replace("https://", "http://", 1)
         try:
-            http_resp = requests.get(
+            http_resp = safe_get(
                 http_url, timeout=_TIMEOUT, headers=_HEADERS,
-                allow_redirects=False, verify=False,
+                verify=True,
             )
             location = http_resp.headers.get("Location", "")
             redirected_to_https = (

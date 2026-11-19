@@ -24,6 +24,7 @@ import requests
 from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup
 from modules.risk_classifier import classify_finding
+from utils.validators import safe_get
 
 _TIMEOUT = 15
 _HEADERS = {
@@ -69,6 +70,11 @@ _PRIVACY_URL_PATTERNS = [
 ]
 
 
+def _same_site(host: str, base_host: str) -> bool:
+    host, base_host = host.lower().rstrip("."), base_host.lower().rstrip(".")
+    return host == base_host or host.endswith("." + base_host)
+
+
 def run_privacy_scan(url: str) -> list[dict]:
     """
     Run all passive privacy checks on the given URL.
@@ -84,9 +90,9 @@ def run_privacy_scan(url: str) -> list[dict]:
 
     # ── Fetch the page ────────────────────────────────────────────────────────
     try:
-        response = requests.get(
+        response = safe_get(
             url, timeout=_TIMEOUT, headers=_HEADERS,
-            allow_redirects=True, verify=False,
+            verify=True,
         )
         html = response.text
         cookies = response.cookies
@@ -110,7 +116,7 @@ def run_privacy_scan(url: str) -> list[dict]:
 
     for cookie in cookies:
         cookie_domain = cookie.domain.lstrip(".")
-        if cookie_domain and base_domain and not base_domain.endswith(cookie_domain):
+        if cookie_domain and base_domain and not _same_site(cookie_domain, base_domain):
             third_party.append(f"{cookie.name} ({cookie.domain})")
         else:
             first_party.append(cookie.name)
@@ -163,7 +169,7 @@ def run_privacy_scan(url: str) -> list[dict]:
             continue
 
         # Is it external?
-        if tag_host and base_domain and not tag_host.endswith(base_domain):
+        if tag_host and base_domain and not _same_site(tag_host, base_domain):
             external_domains.add(tag_host)
 
             # Match against tracker list
@@ -253,12 +259,14 @@ def run_privacy_scan(url: str) -> list[dict]:
         href = a_tag["href"].lower()
         link_text = a_tag.get_text(strip=True).lower()
 
-        if any(re.search(p, href) for p in _PRIVACY_URL_PATTERNS):
+        candidate = urljoin(url, a_tag["href"])
+        candidate_host = urlparse(candidate).hostname or ""
+        if _same_site(candidate_host, base_domain) and any(re.search(p, href) for p in _PRIVACY_URL_PATTERNS):
             privacy_page_found = True
-            privacy_page_url = urljoin(url, a_tag["href"])
+            privacy_page_url = candidate
             break
 
-        if any(kw in link_text for kw in ["privacy", "privacy policy", "data protection"]):
+        if _same_site(candidate_host, base_domain) and any(kw in link_text for kw in ["privacy", "privacy policy", "data protection"]):
             privacy_page_found = True
             privacy_page_url = urljoin(url, a_tag["href"])
             break
@@ -268,9 +276,9 @@ def run_privacy_scan(url: str) -> list[dict]:
         for path in ["/privacy-policy", "/privacy", "/privacy_policy"]:
             try:
                 test_url = f"{parsed.scheme}://{parsed.netloc}{path}"
-                r = requests.get(
+                r = safe_get(
                     test_url, timeout=8, headers=_HEADERS,
-                    allow_redirects=True, verify=False,
+                    verify=True,
                 )
                 if r.status_code == 200 and len(r.text) > 500:
                     privacy_page_found = True
@@ -290,9 +298,9 @@ def run_privacy_scan(url: str) -> list[dict]:
     else:
         # ── 5. Privacy disclosure keyword check ───────────────────────────────
         try:
-            priv_resp = requests.get(
+            priv_resp = safe_get(
                 privacy_page_url, timeout=10, headers=_HEADERS,
-                allow_redirects=True, verify=False,
+                verify=True,
             )
             priv_text = priv_resp.text.lower()
             found_kws = [kw for kw in _PRIVACY_KEYWORDS if kw in priv_text]
