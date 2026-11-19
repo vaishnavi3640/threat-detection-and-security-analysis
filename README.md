@@ -31,11 +31,13 @@ A web app that scans websites for security vulnerabilities and privacy issues. B
 
 ## Architecture
 
-The diagram below shows how an authorized scan moves through the frontend, API,
-target-safety checks, passive analyzers, scoring, database, and report/history
-views.
+The diagram below presents the system architecture. Some pictured items—such as
+XSS/SQL injection testing, external threat-intelligence APIs, Tailwind CSS, and
+MySQL/PostgreSQL runtime support—are conceptual and are not part of the current
+implementation. ThreatGuard currently performs passive website checks, uses
+React + Vite, Flask, and SQLAlchemy with SQLite by default.
 
-![ThreatGuard system architecture](docs/threatguard-architecture.svg)
+![ThreatGuard system architecture](docs/threatguard-architecture.png)
 
 ## How to Run
 
