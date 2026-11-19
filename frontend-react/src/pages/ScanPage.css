@@ -1,0 +1,52 @@
+.scan-page { max-width: 900px; margin: 0 auto; }
+
+.scan-hero {
+  background: linear-gradient(135deg, var(--bg-card) 0%, #0f2341 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.scan-hero-icon { color: var(--accent); margin-bottom: 16px; display: flex; justify-content: center; }
+.scan-hero-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.scan-hero-sub { color: var(--text-sec); font-size: 15px; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+.scan-form { margin-bottom: 20px; }
+.scan-input-wrap {
+  display: flex; align-items: center;
+  background: var(--bg-hover); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  max-width: 640px; margin: 0 auto;
+  transition: border-color .2s;
+}
+.scan-input-wrap:focus-within { border-color: var(--accent); }
+.scan-input-icon { color: var(--text-muted); margin: 0 12px; flex-shrink: 0; }
+.scan-input {
+  flex: 1; padding: 14px 0; background: none; border: none;
+  color: var(--text-prim); font-size: 15px; outline: none;
+}
+.scan-input::placeholder { color: var(--text-muted); }
+.scan-btn { border-radius: 0; padding: 14px 24px; height: 100%; }
+.btn-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  display: inline-block;
+}
+
+.examples-row { display: flex; align-items: center; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.examples-label { font-size: 12px; color: var(--text-muted); }
+.example-pill {
+  background: var(--bg-hover); border: 1px solid var(--border);
+  border-radius: 999px; padding: 4px 14px;
+  font-size: 12px; color: var(--text-sec);
+  transition: all .15s;
+}
+.example-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+.scan-feature { text-align: center; }
+.scan-feature h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.scan-feature p { font-size: 13px; color: var(--text-sec); line-height: 1.6; }
