@@ -3,7 +3,6 @@ import { RefreshCw, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../api'
 import '../components/shared.css'
-import './ReassessPage.css'
 
 export default function ReassessPage() {
   const [url, setUrl] = useState('')
