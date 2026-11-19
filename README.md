@@ -160,8 +160,8 @@ docker-compose up --build
 | Contributor | Focus Area |
 |-------------|------------|
 | Vaishnavi   | Frontend (React) + Backend API Integration |
-| Team Member | Database Schema (MySQL) |
-| Team Member | Backend Modules & Scanning Engine |
+| Aishwarya | Database Schema (MySQL) |
+| Aditi | Backend Modules & Scanning Engine |
 
 ---
 
