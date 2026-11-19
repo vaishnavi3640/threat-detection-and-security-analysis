@@ -12,7 +12,7 @@ from database.db import get_session
 from database.models import Scan, Finding, Website
 
 
-def get_scans_for_url(url: str) -> list[dict]:
+def get_scans_for_url(url: str, user_id: int | None = None) -> list[dict]:
     """
     Return all completed scans for a given URL, ordered newest first.
 
@@ -23,7 +23,10 @@ def get_scans_for_url(url: str) -> list[dict]:
     """
     db = get_session()
     try:
-        websites = db.query(Website).filter(Website.website_url == url).all()
+        website_query = db.query(Website).filter(Website.website_url == url)
+        if user_id is not None:
+            website_query = website_query.filter(Website.user_id == user_id)
+        websites = website_query.all()
         website_ids = [w.id for w in websites]
         if not website_ids:
             return []
