@@ -50,7 +50,7 @@ class Scan(Base):
     security_score = Column(Float, default=0.0)
     privacy_score = Column(Float, default=0.0)
     trust_score = Column(Float, default=0.0)
-    scan_status = Column(String(20), default="pending")  # pending, running, completed, failed
+    scan_status = Column(String(20), default="queued")  # queued, running, completed, failed
     scan_duration = Column(Float, default=0.0)           # seconds
     total_findings = Column(Integer, default=0)
 
@@ -94,3 +94,36 @@ class Report(Base):
 
     def __repr__(self):
         return f"<Report id={self.id} scan_id={self.scan_id}>"
+
+
+class WorkspaceSetting(Base):
+    __tablename__ = "workspace_settings"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    workspace_name = Column(String(120), nullable=False, default="My Workspace")
+    primary_contact = Column(String(120), nullable=False, default="")
+    email_notifications = Column(Boolean, nullable=False, default=True)
+    privacy_checks = Column(Boolean, nullable=False, default=True)
+    owasp_references = Column(Boolean, nullable=False, default=True)
+
+
+class WorkspaceTicket(Base):
+    __tablename__ = "workspace_tickets"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    subject = Column(String(200), nullable=False)
+    area = Column(String(40), nullable=False, default="Security")
+    owner = Column(String(80), nullable=False, default="Workspace")
+    status = Column(String(20), nullable=False, default="Open")
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class RiskState(Base):
+    __tablename__ = "risk_states"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    finding_id = Column(Integer, ForeignKey("findings.id"), primary_key=True)
+    status = Column(String(20), nullable=False, default="Open")
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)

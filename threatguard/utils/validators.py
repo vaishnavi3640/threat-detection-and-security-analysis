@@ -2,7 +2,11 @@
 URL and input validation utilities for THREATGUARD.
 """
 import re
-from urllib.parse import urlparse
+import os
+import ipaddress
+import socket
+import requests
+from urllib.parse import urljoin, urlparse
 
 
 ALLOWED_SCHEMES = {"http", "https"}
@@ -36,6 +40,7 @@ def validate_url(url: str) -> tuple[bool, str]:
 
     try:
         parsed = urlparse(url)
+        port = parsed.port
     except Exception as exc:
         return False, f"URL parsing failed: {exc}"
 
@@ -47,6 +52,13 @@ def validate_url(url: str) -> tuple[bool, str]:
     host = parsed.hostname or ""
     if not host:
         return False, "No hostname found in the URL."
+    if parsed.username or parsed.password:
+        return False, "URLs containing embedded usernames or passwords are not accepted."
+
+    # Development-only exception for the bundled demo server. It is bound to
+    # loopback and fixed to one port; all other local/private targets remain blocked.
+    if _is_enabled_demo_target(parsed):
+        return True, url
 
     # Block private / loopback addresses
     if host in _BLOCKED_HOSTS:
@@ -54,6 +66,16 @@ def validate_url(url: str) -> tuple[bool, str]:
 
     if any(host.startswith(prefix) for prefix in _BLOCKED_PREFIXES):
         return False, f"Scanning '{host}' is not permitted (private IP range)."
+
+    try:
+        if _is_ip(host):
+            addresses = {ipaddress.ip_address(host)}
+        else:
+            addresses = {ipaddress.ip_address(item[4][0]) for item in socket.getaddrinfo(host, port or (443 if parsed.scheme == "https" else 80))}
+    except (OSError, ValueError):
+        return False, "The website host could not be resolved."
+    if not addresses or any(not address.is_global for address in addresses):
+        return False, "Private, local, and reserved network addresses cannot be scanned."
 
     # Basic hostname syntax check
     hostname_re = re.compile(
@@ -65,6 +87,46 @@ def validate_url(url: str) -> tuple[bool, str]:
         return False, f"'{host}' does not appear to be a valid hostname."
 
     return True, url
+
+
+def _is_enabled_demo_target(parsed) -> bool:
+    """Allow only the local demo origin when explicitly enabled in development."""
+    return (
+        os.environ.get("APP_ENV", "").strip().lower() in {"dev", "development"}
+        and os.environ.get("THREATGUARD_LOCAL_DEMO", "").strip() == "1"
+        and parsed.scheme == "http"
+        and parsed.hostname == "127.0.0.1"
+        and parsed.port == 8765
+        and not parsed.username
+        and not parsed.password
+    )
+
+
+def safe_get(url: str, *, max_redirects: int = 5, **kwargs) -> requests.Response:
+    """GET an HTTP(S) URL, validating each redirect destination before use."""
+    kwargs.pop("allow_redirects", None)
+    current = url
+    for _ in range(max_redirects + 1):
+        valid, normalized = validate_url(current)
+        if not valid:
+            raise ValueError(normalized)
+        response = requests.get(normalized, allow_redirects=False, **kwargs)
+        response.url = normalized
+        if response.status_code not in (301, 302, 303, 307, 308):
+            return response
+        location = response.headers.get("Location")
+        if not location:
+            return response
+        current = urljoin(normalized, location)
+    raise ValueError("The website redirected too many times.")
+
+
+def _is_ip(host: str) -> bool:
+    try:
+        ipaddress.ip_address(host)
+        return True
+    except ValueError:
+        return False
 
 
 def _is_valid_ipv4(host: str) -> bool:
