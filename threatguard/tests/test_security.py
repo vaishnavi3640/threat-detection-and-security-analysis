@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import unittest
 from unittest.mock import patch, MagicMock
 from modules.security_scanner import run_security_scan
-from utils.validators import validate_url
+from utils.validators import safe_get, validate_url
 
 
 def _make_response(
@@ -174,6 +174,33 @@ class TestURLValidation(unittest.TestCase):
         valid, message = validate_url("http://")
         self.assertFalse(valid)
         self.assertTrue(message)
+
+
+class TestSafeRedirects(unittest.TestCase):
+    def test_blocks_redirect_to_private_target(self):
+        redirect_response = MagicMock()
+        redirect_response.status_code = 302
+        redirect_response.headers = {
+            "Location": "http://127.0.0.1:8765/private"
+        }
+
+        with patch(
+            "utils.validators.validate_url",
+            side_effect=[
+                (True, "https://example.com"),
+                (False, "Private network targets are blocked."),
+            ],
+        ), patch("utils.validators.requests.get") as mock_get:
+            mock_get.return_value = redirect_response
+
+            with self.assertRaises(ValueError):
+                safe_get("https://example.com")
+
+            # It made the first mocked request but did not follow the unsafe redirect.
+            self.assertEqual(mock_get.call_count, 1)
+
+
+
 
 
 if __name__ == "__main__":
