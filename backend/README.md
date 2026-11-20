@@ -4,6 +4,36 @@
 
 ThreatGuard uses a Flask backend to accept authorized website assessments, run passive security and privacy checks, store results, and compare assessments.
 
+## Architecture
+
+The frontend communicates with the Flask API using JSON requests. The backend validates requests, runs scans, and stores assessment results through SQLAlchemy. The frontend does not connect directly to the database.
+
+```mermaid
+flowchart LR
+    U[User] --> FE[React frontend]
+    FE -->|JSON requests to /api| API[Flask API]
+    API --> AUTH[Authentication and URL validation]
+    API -->|Queue scan| JOB[Background scan task]
+
+    JOB --> SEC[Security scanner]
+    JOB --> PRIV[Privacy analyzer]
+    SEC -->|Passive HTTP checks| SITE[Authorized target website]
+    PRIV -->|Observable privacy signals| SITE
+
+    SEC --> SCORE[Scoring and findings]
+    PRIV --> SCORE
+    SCORE --> ORM[SQLAlchemy data layer]
+    ORM --> DB[(SQLite by default)]
+
+    API -->|Retrieve results and history| ORM
+    ORM --> API
+    API -->|JSON results| FE
+```
+
+**Scan flow:** The API queues an assessment, the background task runs the security and privacy checks, and the results are stored in the database. The frontend retrieves the results from the API.
+
+
+
 ## Setup and startup
 
 From the project root, install the backend dependencies:
