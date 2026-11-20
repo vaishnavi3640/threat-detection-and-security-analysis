@@ -1,0 +1,29 @@
+.result-scores-wrap { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; }
+@media(max-width:768px){ .result-scores-wrap{ grid-template-columns:1fr; } }
+.result-scores-card {}
+.result-scores-row { display: flex; justify-content: space-around; padding: 8px 0; }
+.result-dist-card {}
+
+.tab-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  background: var(--bg-hover); color: var(--text-sec);
+  border: 1px solid var(--border);
+  transition: all .15s;
+}
+.tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tab-btn.active { background: rgba(59,130,246,.15); color: var(--accent); border-color: var(--accent); }
+.tab-count {
+  background: var(--bg-card); color: var(--text-muted);
+  padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600;
+}
+
+.expand-btn {
+  background: none; color: var(--text-muted);
+  font-size: 11px; margin-top: 8px; padding: 2px 0;
+  transition: color .15s;
+}
+.expand-btn:hover { color: var(--accent); }
+
+.ai-explain { background: rgba(168,85,247,.05); border: 1px solid rgba(168,85,247,.15); border-radius: 8px; padding: 10px; }

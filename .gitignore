@@ -1,16 +1,48 @@
-# Node
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor directories
-.vscode/
-.idea/
-
-# Build output
+# ─── Python ─────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
 dist/
 build/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+ENV/
+
+# ─── Environment Variables ──────────────────────────
+.env
+!backend/.env.example
+!threatguard/.env.example
+
+# ─── Database files (keep schema SQL, ignore runtime) 
+*.db
+*.sqlite
+*.sqlite3
+
+# ─── Outputs / Reports ─────────────────────────────
+threatguard/outputs/
+outputs/
+
+# ─── Logs ───────────────────────────────────────────
+*.log
+logs/
+
+# ─── Node / React ──────────────────────────────────
+node_modules/
+frontend-react/dist/
+
+# ─── IDE ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── OS ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

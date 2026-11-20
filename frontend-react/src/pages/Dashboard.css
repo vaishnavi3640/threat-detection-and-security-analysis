@@ -1,0 +1,6 @@
+.scores-row { display: flex; justify-content: space-around; padding: 12px 0; }
+.pie-legend { display: flex; flex-direction: column; gap: 8px; }
+.pie-legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-sec); }
+.pie-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.pie-count { margin-left: auto; font-weight: 600; color: var(--text-prim); padding-left: 16px; }
+.domain-cell { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent); }
