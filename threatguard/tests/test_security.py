@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import unittest
 from unittest.mock import patch, MagicMock
 from modules.security_scanner import run_security_scan
+from utils.validators import validate_url
 
 
 def _make_response(
@@ -160,6 +161,19 @@ class TestFindingStructure(unittest.TestCase):
         for f in findings:
             self.assertIn(f["severity"], valid_severities,
                           f"Invalid severity '{f['severity']}' in finding '{f['finding_name']}'")
+
+
+
+class TestURLValidation(unittest.TestCase):
+    def test_blocks_private_ip(self):
+        valid, message = validate_url("http://192.168.1.10")
+        self.assertFalse(valid)
+        self.assertIn("private", message.lower())
+
+    def test_rejects_url_without_hostname(self):
+        valid, message = validate_url("http://")
+        self.assertFalse(valid)
+        self.assertTrue(message)
 
 
 if __name__ == "__main__":
